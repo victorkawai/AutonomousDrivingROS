@@ -1,0 +1,19 @@
+# Git Ignore Files
+*,log
+*.swp
+
+# ROS specific ignores
+
+ros_ws/build/
+ros_ws/install/
+ros_ws/logs/
+ros_ws/.catkin_tools/
+ros_ws/.catkin_workspace
+ros_ws/devel/*
+
+# Except this directory
+
+!ros_ws/devel/lib/
+ros_ws/devel/lib/*
+!ros_ws/devel/lib/simulation/
+!ros_ws/devel/lib/simulation/**
