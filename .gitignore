@@ -18,5 +18,6 @@ ros_ws/devel/lib/*
 !ros_ws/devel/lib/simulation/
 ros_ws/devel/lib/simulation/*
 !ros_ws/devel/lib/simulation/Car_build.x86_64
+!ros_ws/devel/lib/simulation/UnityPlayer.so
 !ros_ws/devel/lib/simulation/Car_build_Data/
 !ros_ws/devel/lib/simulation/Car_build_Data/**
