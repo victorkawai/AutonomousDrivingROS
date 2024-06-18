@@ -1,0 +1,18 @@
+xhost +local:docker
+
+docker run -it --rm \
+  --env="DISPLAY" \
+  --env="QT_X11_NO_MITSHM=1" \
+  --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+  ros_noetic
+
+xhost +local:docker
+
+docker run -it \
+    --gpus all \
+    --runtime=nvidia \
+    -e NVIDIA_VISIBLE_DEVICES=all \
+    -e NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics \
+    -e DISPLAY=$DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    ros_noetic
