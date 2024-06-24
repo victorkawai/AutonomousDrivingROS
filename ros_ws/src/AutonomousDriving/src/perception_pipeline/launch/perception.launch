@@ -1,0 +1,17 @@
+<launch>
+  <!-- Nodelet manager -->
+  <node pkg="nodelet" type="nodelet" name="my_nodelet_manager" args="manager"/>
+
+  <!-- Subscribe to the depth image and camera info topics -->
+  <node pkg="nodelet" type="nodelet" name="depth_image_proc_nodelet" args="load depth_image_proc/point_cloud_xyzrgb my_nodelet_manager">
+    <remap from="depth_registered/image_rect" to="/unity_ros/OurCar/Sensors/DepthCamera/image_raw_fixed"/>
+    <remap from="rgb/camera_info" to="/unity_ros/OurCar/Sensors/RGBCameraLeft/camera_info"/>
+    <remap from="rgb/image_rect_color" to="/unity_ros/OurCar/Sensors/RGBCameraLeft/image_raw"/>
+  </node>
+
+  <!-- Node to fix depth frame ID -->
+  <node pkg="perception_pipeline" type="fix_depth_frame.py" name="perception_node" output="screen"/>
+  
+  <!-- Node to fix point cloud frame ID -->
+  <node pkg="perception_pipeline" type="point_cloud_frame_fix.py" name="point_cloud_frame_fix" output="screen"/>
+</launch>
