@@ -1,0 +1,25 @@
+<launch>
+    <!-- Static transform from map to world -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_world" args="0 0 0 0 0 0 1 map world" />
+
+    <!-- Octomap server configuration -->
+    <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+        <param name="resolution" value="0.1" />
+        <param name="frame_id" type="string" value="map" />
+        <param name="sensor_model/max_range" value="8.0" />
+        <remap from="cloud_in" to="/depth_registered/transformed_points" />
+    </node>
+
+    <!-- Existing nodes -->
+    <node pkg="nodelet" type="nodelet" name="my_nodelet_manager" args="manager"/>
+    <node pkg="nodelet" type="nodelet" name="depth_image_proc_nodelet" args="load depth_image_proc/point_cloud_xyzrgb my_nodelet_manager">
+        <remap from="depth_registered/image_rect" to="/unity_ros/OurCar/Sensors/DepthCamera/image_raw_fixed"/>
+        <remap from="rgb/camera_info" to="/unity_ros/OurCar/Sensors/RGBCameraLeft/camera_info"/>
+        <remap from="rgb/image_rect_color" to="/unity_ros/OurCar/Sensors/RGBCameraLeft/image_raw"/>
+    </node>
+    <node pkg="perception_pipeline" type="fix_depth_frame.py" name="perception_node" output="screen"/>
+
+    <!-- Transform point cloud node -->
+    <node pkg="transform_pointcloud_node" type="transform_pointcloud_node" name="transform_pointcloud_node" output="screen"/>
+
+</launch>
