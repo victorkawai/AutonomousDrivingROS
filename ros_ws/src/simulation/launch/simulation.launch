@@ -77,4 +77,10 @@
   <!-- Transform point cloud node -->
   <node pkg="transform_pointcloud_node" type="transform_pointcloud_node" name="transform_pointcloud_node" output="screen"/>
 
+  <!-- RViz Node -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find simulation)/rviz/autonomous.rviz"/>
+
+  <!-- Path Tracker Node -->
+  <node name="path_tracker" pkg="path_tracker" type="path_tracker_node" output="screen"/>
+
 </launch>
