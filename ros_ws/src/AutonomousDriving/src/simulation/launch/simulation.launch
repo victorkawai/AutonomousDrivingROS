@@ -40,7 +40,29 @@
 
   <node name="w_to_unity" pkg="simulation" type="w_to_unity"/>
 
+  <!-- RViz Node -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find simulation)/rviz/default_rviz_config.rviz"/>
 
+  <!-- Road point cloud node -->
+  <node pkg="depth_semantic_road" type="depth_semantic_fusion_node.py" name="depth_semantic_fusion_node" output="screen">
+    <param name="point_retention_percentage" value="0.1"/>
+  </node>
+
+  <!-- OctoMap Road Server Node -->
+  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server_road" output="screen">
+    <param name="resolution" value="0.8"/>
+    <param name="frame_id" value="world"/>
+    <param name="sensor_model/max_range" value="20"/>
+    <remap from="cloud_in" to="/road_point_cloud"/>
+  </node>
+
+  <!-- OctoMap Obstacle Server Node -->
+  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server_obstacle" output="screen">
+    <param name="resolution" value="0.5"/>
+    <param name="frame_id" value="world"/>
+    <param name="sensor_model/max_range" value="20"/>
+    <remap from="cloud_in" to="/obstacle_point_cloud"/>
+  </node>
 
   <node pkg="tf2_ros" type="static_transform_publisher"
         name="sim_true_body"      args="0 0 0 0 0 0 /Quadrotor/TrueState /true_body" />
