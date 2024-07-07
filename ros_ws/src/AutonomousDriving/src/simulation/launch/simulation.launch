@@ -48,21 +48,30 @@
     <param name="point_retention_percentage" value="0.1"/>
   </node>
 
-  <!-- OctoMap Road Server Node -->
-  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server_road" output="screen">
+  <!-- Static Transform Publisher for map to odom -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_world" args="0 0 0 0 0 0 map world" />
+
+  <!-- Static Transform Publisher for odom to base_link -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="true_body_to_base_link" args="0 0 0 0 0 0 true_body base_link" />
+
+  <!-- OctoMap Server Node -->
+  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server" output="screen">
     <param name="resolution" value="0.8"/>
     <param name="frame_id" value="world"/>
     <param name="sensor_model/max_range" value="20"/>
-    <remap from="cloud_in" to="/road_point_cloud"/>
+    <param name="occupancy_threshold" value="0.5"/>
+    <remap from="cloud_in" to="/point_cloud"/>
   </node>
 
-  <!-- OctoMap Obstacle Server Node -->
-  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server_obstacle" output="screen">
-    <param name="resolution" value="0.5"/>
-    <param name="frame_id" value="world"/>
-    <param name="sensor_model/max_range" value="20"/>
-    <remap from="cloud_in" to="/obstacle_point_cloud"/>
+  <!-- Move Base Node -->
+  <node pkg="move_base" type="move_base" name="move_base" output="screen">
+    <rosparam file="$(find path_planner)/config/global_costmap_params.yaml" command="load" ns="global_costmap"/>
+    <rosparam file="$(find path_planner)/config/local_costmap_params.yaml" command="load" ns="local_costmap"/>
+    <rosparam file="$(find path_planner)/config/base_local_planner_params.yaml" command="load"/>
   </node>
+
+  <!-- Path Planning Node -->
+  <node pkg="path_planner" type="path_planner_node.py" name="path_planning_node" output="screen"/>
 
   <node pkg="tf2_ros" type="static_transform_publisher"
         name="sim_true_body"      args="0 0 0 0 0 0 /Quadrotor/TrueState /true_body" />

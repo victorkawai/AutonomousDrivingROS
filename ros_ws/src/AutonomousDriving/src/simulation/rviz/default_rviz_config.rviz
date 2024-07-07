@@ -6,8 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /TF1/Frames1
-        - /OccupancyGrid1
       Splitter Ratio: 0.5
     Tree Height: 494
   - Class: rviz/Selection
@@ -68,9 +66,13 @@ Visualization Manager:
           Value: false
         Quadrotor/TrueState:
           Value: false
+        base_link:
+          Value: false
         camera:
           Value: false
         depth_camera:
+          Value: false
+        map:
           Value: false
         true_body:
           Value: true
@@ -85,16 +87,19 @@ Visualization Manager:
       Tree:
         Quadrotor/TrueState:
           {}
-        world:
-          true_body:
-            Quadrotor/Sensors/DepthCamera:
-              {}
-            camera:
-              Quadrotor/RGBCameraLeft:
+        map:
+          world:
+            true_body:
+              Quadrotor/Sensors/DepthCamera:
                 {}
-            depth_camera:
-              Quadrotor/DepthCamera:
+              base_link:
                 {}
+              camera:
+                Quadrotor/RGBCameraLeft:
+                  {}
+              depth_camera:
+                Quadrotor/DepthCamera:
+                  {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -178,17 +183,77 @@ Visualization Manager:
       Unreliable: false
       Value: true
     - Class: octomap_rviz_plugin/OccupancyGrid
-      Enabled: true
+      Enabled: false
       Max. Height Display: 3.4028234663852886e+38
       Max. Octree Depth: 16
       Min. Height Display: -3.4028234663852886e+38
       Name: OccupancyGrid
       Octomap Topic: /octomap_full
       Queue Size: 50
-      Value: true
+      Value: false
       Voxel Alpha: 1
       Voxel Coloring: Z-Axis
       Voxel Rendering: Occupied Voxels
+    - Alpha: 1
+      Axes Length: 1
+      Axes Radius: 0.10000000149011612
+      Class: rviz/Pose
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 0.30000001192092896
+      Head Radius: 0.800000011920929
+      Name: Current Goal
+      Queue Size: 10
+      Shaft Length: 1
+      Shaft Radius: 0.5
+      Shape: Arrow
+      Topic: /checkpoint
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 25; 255; 0
+      Enabled: true
+      Head Diameter: 0.30000001192092896
+      Head Length: 0.20000000298023224
+      Length: 0.30000001192092896
+      Line Style: Lines
+      Line Width: 0.029999999329447746
+      Name: Local Plan
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Queue Size: 10
+      Radius: 0.029999999329447746
+      Shaft Diameter: 0.10000000149011612
+      Shaft Length: 0.10000000149011612
+      Topic: /move_base/TrajectoryPlannerROS/local_plan
+      Unreliable: false
+      Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Local Costmap
+      Topic: /move_base/local_costmap/costmap
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic: /projected_map
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -217,7 +282,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 90.22083282470703
+      Distance: 108.35523986816406
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -225,17 +290,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -38.9388542175293
-        Y: -27.171354293823242
-        Z: -9.658720970153809
+        X: -16.84244155883789
+        Y: -37.007713317871094
+        Z: -19.083789825439453
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7047964334487915
+      Pitch: 0.6497960686683655
       Target Frame: <Fixed Frame>
-      Yaw: 3.888584613800049
+      Yaw: 6.2285847663879395
     Saved: ~
 Window Geometry:
   Depth Image:
@@ -257,5 +322,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 2548
-  X: -32
+  X: 2528
   Y: -32
