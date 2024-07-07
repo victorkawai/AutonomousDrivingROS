@@ -30,15 +30,12 @@ class DepthSemanticRoadNode:
         self.imu_twist_sub = rospy.Subscriber('/unity_ros/OurCar/Sensors/IMU/twist', TwistStamped, self.imu_twist_callback)
 
 
-        # Publish the point cloud representing the road. This will then be
-        # subscribed to by the octree server node which will build an octogrid
+        # Publish the point cloud representing the road as free space and the
+        # obstacles as occupied space. This will then be subscribed to by the
+        # octree server node which will build an octogrid
         # from it.
         # TODO: Think about the 'queue_size' parameter.
-        self.road_point_cloud_pub = rospy.Publisher('/road_point_cloud', PointCloud2, queue_size=10)
-
-        # Publish the point cloud representing the obstacles.
-        # TODO: Think about the 'queue_size' parameter.
-        self.obstacle_point_cloud_pub = rospy.Publisher('/obstacle_point_cloud', PointCloud2, queue_size=10)
+        self.point_cloud_pub = rospy.Publisher('/point_cloud', PointCloud2, queue_size=10)
         
         # Intit intrinsic params.
         self.depth_image = None
@@ -58,8 +55,8 @@ class DepthSemanticRoadNode:
     def semantic_callback(self, msg):
         """Parse semantic image."""
         try:
-            # NOTE: With this encoding, gray has a value of 127, yellow is 215
-            #       and red is 76.
+            # NOTE: With the mono8 encoding, gray has a value of 127, yellow is
+            #   	215 and red is 76.
             self.semantic_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='mono8')
         except cv_bridge.CvBridgeError as e:
             rospy.logerr(e)
@@ -75,27 +72,13 @@ class DepthSemanticRoadNode:
         """Parse IMU twist data."""
         self.orientation = np.array([msg.twist.angular.x, msg.twist.angular.z, msg.twist.angular.y, 1.0])
 
-
-    def transform_point(self, point):
-        """Transform point from camera frame to world frame using updated pose."""
-        # Convert point to homogeneous coordinates
-        point_homogeneous = np.array([point[0], point[1], point[2], 1.0])
-
-        # Create rotation matrix from orientation.
-        rotation = tf.transformations.quaternion_matrix(self.orientation)
-
-        # Transform the point.
-        point_transformed = np.dot(rotation, point_homogeneous)
-        return point_transformed[:3]
-
     def create_point_cloud(self):
         """Segment depth image with semantic camera into road pointcloud."""
 
         if self.depth_image is None or self.semantic_image is None:
             return
         
-        road_points = []
-        obstacle_points = []
+        points = []
         
         # Fuse both images and apply camera params for correct depth.
         # Iterate over all pixels.
@@ -116,10 +99,6 @@ class DepthSemanticRoadNode:
                         x = (u - self.depth_image.shape[1] / 2) * z / self.fx
                         y = (v - self.depth_image.shape[0] / 2) * z / self.fy
 
-                        # NOTE: Using twist to compensate for car tilt did not
-                        #       work, but may be worth revisiting.
-                        # point = self.transform_point(point)
-
                         # Swap y- and z-axis for correct orientation of the
                         # pointcloud since its not actually the z-axis we're
                         # looking at.
@@ -128,25 +107,28 @@ class DepthSemanticRoadNode:
                             # NOTE: Fix the height coordinate at 0, because the
                             #       height component is inaccurate due to
                             #       movement of the car anyways.
-                            road_points.append([x, z, 0.1])
+                            # Intesity of -1 represents free space.
+                            points.append([x, z, 0.1, -1])
                         elif self.semantic_image[v, u] == 76:
 
                             # NOTE: Height also doesn't matter here but it
                             #       looks cooler like this :D
-                            obstacle_points.append([x, z, y])
+                            # Intensity of 1 represents occupied space.
+                            points.append([x, z, y, 1])
 
         # Build header, points should be attached to 'true_body'.
         header = rospy.Header()
         header.stamp = rospy.Time.now()
         header.frame_id = 'true_body'
 
-        # Publish road pointcloud.
-        road_point_cloud_msg = point_cloud2.create_cloud_xyz32(header, road_points)
-        self.road_point_cloud_pub.publish(road_point_cloud_msg)
-
-        # Publish obstacle pointcloud.
-        obstacle_point_cloud_msg = point_cloud2.create_cloud_xyz32(header, obstacle_points)
-        self.obstacle_point_cloud_pub.publish(obstacle_point_cloud_msg)
+        # Publish pointcloud.
+        point_cloud_msg = point_cloud2.create_cloud(header, [
+            point_cloud2.PointField('x', 0, point_cloud2.PointField.FLOAT32, 1),
+            point_cloud2.PointField('y', 4, point_cloud2.PointField.FLOAT32, 1),
+            point_cloud2.PointField('z', 8, point_cloud2.PointField.FLOAT32, 1),
+            point_cloud2.PointField('intensity', 12, point_cloud2.PointField.FLOAT32, 1),
+        ], points)
+        self.point_cloud_pub.publish(point_cloud_msg)
 
 
     def spin(self):
