@@ -18,8 +18,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(path_tracker_node src/path_tracker_node.cpp)
-
-target_link_libraries(path_tracker_node
-  ${catkin_LIBRARIES}
+catkin_install_python(PROGRAMS
+  src/path_tracker_node.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
