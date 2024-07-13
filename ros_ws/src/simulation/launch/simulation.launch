@@ -49,14 +49,11 @@
   <node pkg="tf2_ros" type="static_transform_publisher"
       name="sim_depth_camera" args="0 0 0 0 0 0 /true_body /OurCar/Sensors/DepthCamera" />
 
-  <!-- Static transform from map to world -->
-  <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_world" args="0 0 0 0 0 0 1 map world" />
-
   <!-- Octomap server configuration -->
   <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
-      <param name="resolution" value="0.4" />
+      <param name="resolution" value="0.3" />
       <param name="frame_id" type="string" value="map" />
-      <param name="sensor_model/max_range" value="8.0" />
+      <param name="sensor_model/max_range" value="5.0" />
       <remap from="cloud_in" to="/depth_registered/transformed_points" />
   </node>
 
@@ -82,5 +79,61 @@
 
   <!-- Path Tracker Node -->
   <node name="path_tracker" pkg="path_tracker" type="path_tracker_node" output="screen"/>
+
+  <arg name="depth_image_topic_2" default="/unity_ros/OurCar/Sensors/DepthCamera/image_raw" />
+  <arg name="depth_camera_info_topic" default="/unity_ros/OurCar/Sensors/DepthCamera/camera_info" />
+  <arg name="scan_topic" default="/scan" />
+  <arg name="base_frame" default="true_body"/>
+  <arg name="odom_frame" default="body"/>
+
+  <!-- Depthimage to Laserscan Node -->
+  <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan">
+    <param name="scan_time" value="0.0333" />
+    <param name="range_min" value="0.1" />
+    <param name="range_max" value="10.0" />
+    <param name="scan_height" value="10" />
+    <param name="output_frame_id" value="$(arg base_frame)" />
+    <remap from="image" to="$(arg depth_image_topic_2)" />
+    <remap from="camera_info" to="$(arg depth_camera_info_topic)" />
+    <remap from="scan" to="$(arg scan_topic)" />
+  </node>
+
+  <!-- GMapping Node -->
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+    <remap from="scan" to="$(arg scan_topic)"/>
+    <param name="base_frame" value="$(arg base_frame)"/>
+    <param name="odom_frame" value="$(arg odom_frame)"/>
+    <param name="map_update_interval" value="2.0"/>
+    <param name="maxUrange" value="10.0"/>
+    <param name="maxRange" value="10.0"/>
+    <param name="sigma" value="0.05"/>
+    <param name="kernelSize" value="1"/>
+    <param name="lstep" value="0.05"/>
+    <param name="astep" value="0.05"/>
+    <param name="iterations" value="5"/>
+    <param name="lsigma" value="0.075"/>
+    <param name="ogain" value="3.0"/>
+    <param name="lskip" value="0"/>
+    <param name="minimumScore" value="200"/>
+    <param name="srr" value="0.01"/>
+    <param name="srt" value="0.02"/>
+    <param name="str" value="0.01"/>
+    <param name="stt" value="0.02"/>
+    <param name="linearUpdate" value="0.1"/>
+    <param name="angularUpdate" value="0.05"/>
+    <param name="temporalUpdate" value="-1.0"/>
+    <param name="resampleThreshold" value="0.5"/>
+    <param name="particles" value="100"/>
+    <param name="use_sim_time" value="false"/>
+    <param name="xmin" value="-50.0"/>
+    <param name="ymin" value="-50.0"/>
+    <param name="xmax" value="50.0"/>
+    <param name="ymax" value="50.0"/>
+    <param name="delta" value="0.05"/>
+    <param name="llsamplerange" value="0.01"/>
+    <param name="llsamplestep" value="0.01"/>
+    <param name="lasamplerange" value="0.005"/>
+    <param name="lasamplestep" value="0.005"/>
+  </node>
 
 </launch>
