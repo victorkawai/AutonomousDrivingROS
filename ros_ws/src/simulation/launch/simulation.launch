@@ -79,7 +79,7 @@
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find simulation)/rviz/autonomous.rviz"/>
 
   <!-- Path Tracker Node -->
-  <node name="path_tracker" pkg="path_tracker" type="path_tracker_node" output="screen"/>
+  <node name="path_tracker_node" pkg="path_tracker" type="path_tracker_node.py" output="screen"/>
 
   <arg name="depth_image_topic_2" default="/unity_ros/OurCar/Sensors/DepthCamera/image_raw" />
   <arg name="depth_camera_info_topic" default="/unity_ros/OurCar/Sensors/DepthCamera/camera_info" />
