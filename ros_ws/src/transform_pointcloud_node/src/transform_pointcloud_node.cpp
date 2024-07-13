@@ -14,9 +14,13 @@ void pointCloudCallback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg) {
     // Define a rotation matrix to transform the point cloud
     Eigen::Matrix4f transform = Eigen::Matrix4f::Identity();
     // Rotate around the x-axis to swap y and z
-    transform(0, 0) = -1;  // Flip the x-axis
+    transform(0, 0) = 1;  // Flip the x-axis
+    transform(0, 1) = 0;
+    transform(0, 2) = 0;
+    transform(1, 0) = 0;
     transform(1, 1) = 0;
-    transform(1, 2) = -1;
+    transform(1, 2) = 1;
+    transform(2, 0) = 0;
     transform(2, 1) = -1;
     transform(2, 2) = 0;
 
