@@ -1,0 +1,20 @@
+map_type:             costmap
+obstacle_range:       20.0
+raytrace_range:       20.0
+footprint:            [[1.2, 2.4], [1.2, -2.4], [-1.2, -2.4], [-1.2, 2.4]]      # Car is roughly 2.4 x 4.8 m
+#robot_radius:        0.0                                                       # Robot is not round.
+
+map_topic: "/map"
+resolution: 0.6
+
+plugins: 
+    - {name: static_map,       type: "costmap_2d::StaticLayer"}
+    - {name: obstacle_layer,    type: "costmap_2d::ObstacleLayer"}
+    - {name: inflation_layer,   type: "costmap_2d::InflationLayer"}
+
+obstacle_layer:
+  observation_sources: point_cloud_sensor
+  point_cloud_sensor: {sensor_frame: OurCar/Sensors/DepthCamera, data_type: PointCloud2, topic: /depth_registered/transformed_points, marking: true, clearing: true}
+
+inflation_layer:
+  inflation_radius: 0.5 # Stay 0.5m away from obstacles.

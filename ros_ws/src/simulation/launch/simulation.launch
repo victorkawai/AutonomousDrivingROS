@@ -54,6 +54,8 @@
       <param name="resolution" value="0.6" />
       <param name="frame_id" type="string" value="map" />
       <param name="sensor_model/max_range" value="20.0" />
+      <param name="pointcloud_min_z" value="-1.05" />
+      <param name="pointcloud_max_z" value="1" />
       <remap from="cloud_in" to="/depth_registered/transformed_points" />
   </node>
 
@@ -80,6 +82,19 @@
 
   <!-- Path Tracker Node -->
   <node name="path_tracker_node" pkg="path_tracker" type="path_tracker_node.py" output="screen"/>
+
+  <!-- Move Base Node -->
+  <node pkg="move_base" type="move_base" name="move_base" output="screen">
+    <remap from="map" to="/projected_map" />
+    <rosparam file="$(find planning)/params/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+    <rosparam file="$(find planning)/params/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+    <rosparam file="$(find planning)/params/global_costmap_params.yaml" command="load" ns="global_costmap"/>
+    <rosparam file="$(find planning)/params/local_costmap_params.yaml" command="load" ns="local_costmap"/>
+    <rosparam file="$(find planning)/params/base_local_planner_params.yaml" command="load"/>
+  </node>
+
+  <node pkg="tf2_ros" type="static_transform_publisher"
+      name="true_body_to_base_link" args="0 0 0 0 0 0 /true_body /base_link" />
 
   <arg name="depth_image_topic_2" default="/unity_ros/OurCar/Sensors/DepthCamera/image_raw" />
   <arg name="depth_camera_info_topic" default="/unity_ros/OurCar/Sensors/DepthCamera/camera_info" />

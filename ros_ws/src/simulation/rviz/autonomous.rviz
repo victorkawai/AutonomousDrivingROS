@@ -4,8 +4,7 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
-        - /Status1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 1069
   - Class: rviz/Selection
@@ -25,7 +24,7 @@ Panels:
   - Class: rviz/Time
     Name: Time
     SyncMode: 0
-    SyncSource: PointCloud2
+    SyncSource: Depth Image
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -43,6 +42,8 @@ Visualization Manager:
         OurCar/Sensors/DepthCamera:
           Value: false
         OurCar/Sensors/RGBCameraLeft:
+          Value: false
+        base_link:
           Value: false
         map:
           Value: false
@@ -64,6 +65,8 @@ Visualization Manager:
             OurCar/Sensors/DepthCamera:
               {}
             OurCar/Sensors/RGBCameraLeft:
+              {}
+            base_link:
               {}
       Update Interval: 0
       Value: true
@@ -97,32 +100,32 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
       Name: PointCloud2
       Position Transformer: XYZ
-      Queue Size: 100
+      Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.10000000149011612
+      Size (m): 0.20000000298023224
       Style: Flat Squares
       Topic: /depth_registered/transformed_points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Class: rviz/MarkerArray
-      Enabled: true
+      Enabled: false
       Marker Topic: occupied_cells_vis_array
       Name: Octogrid
       Namespaces:
-        map: true
+        {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: rviz/Image
-      Enabled: true
+      Enabled: false
       Image Topic: /unity_ros/OurCar/Sensors/SemanticCamera/image_raw
       Max Value: 1
       Median window: 5
@@ -132,9 +135,9 @@ Visualization Manager:
       Queue Size: 2
       Transport Hint: raw
       Unreliable: false
-      Value: true
+      Value: false
     - Class: rviz/Image
-      Enabled: false
+      Enabled: true
       Image Topic: /unity_ros/OurCar/Sensors/DepthCamera/image_raw
       Max Value: 1
       Median window: 5
@@ -144,7 +147,7 @@ Visualization Manager:
       Queue Size: 2
       Transport Hint: raw
       Unreliable: false
-      Value: false
+      Value: true
     - Class: rviz/Image
       Enabled: false
       Image Topic: /unity_ros/OurCar/Sensors/RGBCameraLeft/image_raw
@@ -185,10 +188,78 @@ Visualization Manager:
       Class: octomap_rviz_plugin/OccupancyMap
       Color Scheme: map
       Draw Behind: false
-      Enabled: true
+      Enabled: false
       Max. Octree Depth: 16
       Name: OccupancyMap
       Octomap Binary Topic: /octomap_full
+      Unreliable: false
+      Use Timestamp: false
+      Value: false
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 255; 255; 0
+      Enabled: true
+      Head Diameter: 0.30000001192092896
+      Head Length: 0.20000000298023224
+      Length: 0.30000001192092896
+      Line Style: Lines
+      Line Width: 0.029999999329447746
+      Name: global_plan
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Queue Size: 10
+      Radius: 0.029999999329447746
+      Shaft Diameter: 0.10000000149011612
+      Shaft Length: 0.10000000149011612
+      Topic: /move_base/TrajectoryPlannerROS/global_plan
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 255; 0; 0
+      Enabled: true
+      Head Diameter: 0.30000001192092896
+      Head Length: 0.20000000298023224
+      Length: 0.30000001192092896
+      Line Style: Lines
+      Line Width: 0.029999999329447746
+      Name: local_plan
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Queue Size: 10
+      Radius: 0.029999999329447746
+      Shaft Diameter: 0.10000000149011612
+      Shaft Length: 0.10000000149011612
+      Topic: /move_base/TrajectoryPlannerROS/local_plan
+      Unreliable: false
+      Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: local_costmap
+      Topic: /move_base/local_costmap/costmap
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: global_costmap
+      Topic: /move_base/global_costmap/costmap
       Unreliable: false
       Use Timestamp: false
       Value: true
@@ -220,7 +291,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 113.30888366699219
+      Distance: 198.91552734375
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -228,17 +299,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -3.0667457580566406
-        Y: -44.18803024291992
-        Z: 25.1563663482666
+        X: -27.267568588256836
+        Y: -42.290985107421875
+        Z: -8.96520709991455
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4453979730606079
+      Pitch: 0.7397972941398621
       Target Frame: <Fixed Frame>
-      Yaw: 5.150400638580322
+      Yaw: 6.052220344543457
     Saved: ~
 Window Geometry:
   Depth Image:
@@ -248,7 +319,7 @@ Window Geometry:
   Height: 1367
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd000000040000000000000217000004bdfc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b000004bd000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d00610067006500000002a4000000e000000000000000000000000100000329000004bdfc0200000004fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fc0000003b000002e0000000310100001afa000000000100000003fb0000001c00530065006d0061006e00740069006300200049006d0061006700650100000000ffffffff000000ae00fffffffb000000160044006500700074006800200049006d0061006700650100000000ffffffff0000009a00fffffffb0000001200520047004200200049006d00610067006501000006cb000003290000009000fffffffb0000000a005600690065007700730100000321000001d7000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000009f40000003efc0100000002fb0000000800540069006d00650100000000000009f40000030700fffffffb0000000800540069006d00650100000000000004500000000000000000000004a8000004bd00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000217000004bdfc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b000004bd000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d00610067006500000002a4000000e000000000000000000000000100000329000004bdfc0200000004fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fc0000003b000002e0000000310100001afa000000010100000003fb0000001c00530065006d0061006e00740069006300200049006d0061006700650100000000ffffffff000000ae00fffffffb000000160044006500700074006800200049006d0061006700650100000000ffffffff0000009a00fffffffb0000001200520047004200200049006d00610067006501000006cb000003290000009000fffffffb0000000a005600690065007700730100000321000001d7000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000009f40000003efc0100000002fb0000000800540069006d00650100000000000009f40000030700fffffffb0000000800540069006d00650100000000000004500000000000000000000004a8000004bd00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   RGB Image:
     collapsed: false
   Selection:
@@ -262,5 +333,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 2548
-  X: 2560
-  Y: 0
+  X: 2528
+  Y: -32
