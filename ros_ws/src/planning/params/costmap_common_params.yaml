@@ -1,7 +1,8 @@
 map_type:             costmap
-obstacle_range:       20.0
-raytrace_range:       20.0
-footprint:            [[1.2, 2.4], [1.2, -2.4], [-1.2, -2.4], [-1.2, 2.4]]      # Car is roughly 2.4 x 4.8 m
+obstacle_range:       30.0
+raytrace_range:       30.0
+# footprint:            [[1.2, 2.4], [1.2, -2.4], [-1.2, -2.4], [-1.2, 2.4]]      # Car is roughly 2.4 x 4.8 m
+footprint:            [[2, 4], [2, -4], [-2, -4], [-2, 4]]      # Exxagerated footprint.
 #robot_radius:        0.0                                                       # Robot is not round.
 
 map_topic: "/map"
@@ -17,4 +18,4 @@ obstacle_layer:
   point_cloud_sensor: {sensor_frame: OurCar/Sensors/DepthCamera, data_type: PointCloud2, topic: /depth_registered/transformed_points, marking: true, clearing: true}
 
 inflation_layer:
-  inflation_radius: 0.5 # Stay 0.5m away from obstacles.
+  inflation_radius: 2 # Has less impact than I thought, the footprint parameter is much more impactful.
