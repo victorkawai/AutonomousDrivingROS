@@ -25,8 +25,9 @@ class controllerNode{
   ros::NodeHandle nh;
 
 
-  ros::Subscriber current_state;
-  ros::Publisher car_commands;
+  ros::Subscriber current_state_sub;
+  ros::Subscriber cmd_vel_sub;
+  ros::Publisher car_commands_pub;
   ros::Timer timer;
 
 
@@ -45,12 +46,16 @@ class controllerNode{
 
   double hz;             // frequency of the main control loop
 
+  // Commanded velocities.
+  double linear_velocity;
+  double angular_velocity;
+
 public:
-  controllerNode():hz(1000.0){
-      
-      current_state = nh.subscribe("current_state_est", 1, &controllerNode::onCurrentState, this);
-      car_commands = nh.advertise<mav_msgs::Actuators>("car_commands", 1);
-      timer = nh.createTimer(ros::Rate(hz), &controllerNode::controlLoop, this);
+  controllerNode():hz(100.0), linear_velocity(0.0), angular_velocity(0.0) {
+      current_state_sub = nh.subscribe("current_state_est", 1, &controllerNode::onCurrentState, this);
+      cmd_vel_sub = nh.subscribe("cmd_vel", 1, &controllerNode::onCmdVel, this);
+      car_commands_pub = nh.advertise<mav_msgs::Actuators>("car_commands", 1);
+      timer = nh.createTimer(ros::Duration(1.0/hz), &controllerNode::controlLoop, this);
   }
 
   void onCurrentState(const nav_msgs::Odometry& cur_state){
@@ -67,18 +72,22 @@ public:
     omega = R.transpose()*omega;
   }
 
+  void onCmdVel(const geometry_msgs::Twist& cmd_vel){
+    linear_velocity = cmd_vel.linear.x;
+    angular_velocity = cmd_vel.angular.z;
+  }
 
   void controlLoop(const ros::TimerEvent& t){
 
     mav_msgs::Actuators msg;
 
     msg.angular_velocities.resize(4);
-    msg.angular_velocities[0] = 0.1; // Acceleration
-    msg.angular_velocities[1] = 0;  // Turning angle
+    msg.angular_velocities[0] = linear_velocity; // Acceleration
+    msg.angular_velocities[1] = angular_velocity;  // Turning angle
     msg.angular_velocities[2] = 0;  // Breaking
     msg.angular_velocities[3] = 0;
 
-    car_commands.publish(msg);
+    car_commands_pub.publish(msg);
 
   }
 };
