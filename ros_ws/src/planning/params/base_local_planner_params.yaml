@@ -1,13 +1,47 @@
 # ------------------------- TODO: Tweak parameters! ------------------------- #
 
-TrajectoryPlannerROS: 
-  max_vel_x: 0.45
-  min_vel_x: 0.1
-  max_vel_theta: 1.0
-  min_in_place_vel_theta: 0.4
+TrajectoryPlannerROS:
 
-  acc_lim_theta: 3.2
-  acc_lim_x: 2.5
-  acc_lim_y: 2.5
+  # Robot configuration parameters.
+  max_vel_x: 1.0                    # Maximum velocity in x direction (m/s)
+  min_vel_x: 0.1                    # Minimum velocity in x direction (m/s)
+  max_vel_theta: 1.0                # Maximum rotational velocity (rad/s)
+  min_vel_theta: -1.0               # Minimum rotational velocity (rad/s)
+  acc_lim_x: 0.5                    # Maximum acceleration in x direction (m/s^2)
+  acc_lim_theta: 0.5                # Maximum rotational acceleration (rad/s^2)
 
-  holonomic_robot: true
+  # Trajectory scoring parameters.
+  yaw_goal_tolerance: 0.05          # Tolerance in yaw/rotation to reach the goal (rad)
+  xy_goal_tolerance: 0.2            # Tolerance in position to reach the goal (m)
+  pdist_scale: 0.6                  # Scale for path distance
+  gdist_scale: 0.8                  # Scale for goal distance
+  occdist_scale: 0.5                # Scale for obstacle distance
+
+  # Forward simulation parameters.
+  sim_time: 1.5                     # Time to forward-simulate trajectories (s)
+  sim_granularity: 0.025            # Step size of trajectory generation (m)
+  vx_samples: 10                    # Number of samples for velocity in x direction
+  vtheta_samples: 20                # Number of samples for rotational velocity
+
+  # Obstacle avoidance parameters.
+  path_distance_bias: 32.0          # Bias for the robot to stay close to the path
+  goal_distance_bias: 24.0          # Bias for the robot to reach the goal
+  occdist_scale: 0.01               # Scaling for obstacle distance cost
+  forward_point_distance: 0.325     # Distance from robot center to forward point for cost calculation
+
+  # Parameters for control.
+  max_rotational_vel: 1.0           # Maximum rotational velocity (rad/s)
+  min_in_place_vel_theta: 0.4       # Minimum rotational velocity in place (rad/s)
+  holonomic_robot: false            # Specify if the robot is holonomic
+
+  # Goal tolerance parameters.
+  yaw_goal_tolerance: 0.1           # Tolerance in yaw to consider the goal reached (rad)
+  xy_goal_tolerance: 0.2            # Tolerance in position to consider the goal reached (m)
+  latch_xy_goal_tolerance: true     # Latch the xy goal tolerance
+
+  # Oscillation prevention parameters.
+  oscillation_reset_dist: 0.05      # Distance to reset oscillation flags (m)
+
+  # Other parameters.
+  escape_vel: -0.1                  # Velocity to use while escaping (m/s)
+  prune_plan: true                  # Whether to prune the plan
