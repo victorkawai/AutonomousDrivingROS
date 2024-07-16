@@ -10,7 +10,7 @@ class PathCreator:
         rospy.init_node('path_tracker_node', anonymous=True)
 
         # Subscriber to the pose topic
-        self.pose_sub = rospy.Subscriber('/unity_ros/OurCar/Sensors/IMU/pose', PoseStamped, self.pose_callback)
+        self.pose_sub = rospy.Subscriber('/pose_est', PoseStamped, self.pose_callback)
 
         # Publisher for the path topic
         self.path_pub = rospy.Publisher('/car_path', Path, queue_size=10)

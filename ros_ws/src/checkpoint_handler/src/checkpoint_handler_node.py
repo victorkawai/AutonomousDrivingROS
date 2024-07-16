@@ -34,7 +34,7 @@ class CheckpointHandler:
 
         rospy.init_node('checkpoint_handler', anonymous=True)
 
-        self.pose_subscriber = rospy.Subscriber('/unity_ros/OurCar/Sensors/IMU/pose', PoseStamped, self.pose_callback)
+        self.pose_subscriber = rospy.Subscriber('/pose_est', PoseStamped, self.pose_callback)
         self.costmap_subscriber = rospy.Subscriber('/move_base/global_costmap/costmap', OccupancyGrid, self.costmap_callback)
         self.goal_publisher = rospy.Publisher('/move_base/goal', MoveBaseActionGoal, queue_size=10)
     
@@ -53,7 +53,7 @@ class CheckpointHandler:
             return
         
         if self.current_checkpoint_index >= len(self.checkpoints):
-            rospy.loginfo("All checkpoints reached!")
+            # rospy.loginfo("All checkpoints reached!")
             return
         
         current_position = pose_msg.pose.position

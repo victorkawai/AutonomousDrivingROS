@@ -44,10 +44,10 @@
       name="world_to_map" args="0 0 0 0 0 0 /world /map" />
 
   <node pkg="tf2_ros" type="static_transform_publisher"
-      name="sim_rgb_camera_left" args="0 0 0 0 0 0 /true_body /OurCar/Sensors/RGBCameraLeft" />
+      name="sim_rgb_camera_left" args="0 0 0 0 0 0 /body /OurCar/Sensors/RGBCameraLeft" />
 
   <node pkg="tf2_ros" type="static_transform_publisher"
-      name="sim_depth_camera" args="0 0 0 0 0 0 /true_body /OurCar/Sensors/DepthCamera" />
+      name="sim_depth_camera" args="0 0 0 0 0 0 /body /OurCar/Sensors/DepthCamera" />
 
   <!-- Octomap server configuration -->
   <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
@@ -95,14 +95,5 @@
 
   <!-- Checkpoint handler node -->
   <node pkg="checkpoint_handler" type="checkpoint_handler_node.py" name="checkpoint_handler_node" output="screen"/>
-
-  <node pkg="tf2_ros" type="static_transform_publisher"
-      name="true_body_to_base_link" args="0 0 0 0 0 0 /true_body /base_link" />
-
-  <arg name="depth_image_topic_2" default="/unity_ros/OurCar/Sensors/DepthCamera/image_raw" />
-  <arg name="depth_camera_info_topic" default="/unity_ros/OurCar/Sensors/DepthCamera/camera_info" />
-  <arg name="scan_topic" default="/scan" />
-  <arg name="base_frame" default="true_body"/>
-  <arg name="odom_frame" default="body"/>
 
 </launch>
