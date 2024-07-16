@@ -40,6 +40,7 @@
 
   <node name="w_to_unity" pkg="simulation" type="w_to_unity"/>
 
+  <!-- Specify static transforms because some packages want certain frame names -->
   <node pkg="tf2_ros" type="static_transform_publisher"
       name="world_to_map" args="0 0 0 0 0 0 /world /map" />
 
@@ -48,6 +49,9 @@
 
   <node pkg="tf2_ros" type="static_transform_publisher"
       name="sim_depth_camera" args="0 0 0 0 0 0 /body /OurCar/Sensors/DepthCamera" />
+
+  <node pkg="tf2_ros" type="static_transform_publisher"
+      name="body_to_base_link" args="0 0 0 0 0 0 /body /base_link" />
 
   <!-- Octomap server configuration -->
   <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
@@ -73,6 +77,7 @@
   <!-- Perception Pipeline Nodes -->
   <node pkg="perception_pipeline" type="fix_depth_frame.py" name="perception_node" output="screen"/>
   <node pkg="perception_pipeline" type="point_cloud_frame_fix.py" name="point_cloud_frame_fix" output="screen"/>
+  <node pkg="perception_pipeline" type="traffic_light_detector.py" name="traffic_light_detector" output="screen"/>
 
   <!-- Transform point cloud node -->
   <node pkg="transform_pointcloud_node" type="transform_pointcloud_node" name="transform_pointcloud_node" output="screen"/>
@@ -95,8 +100,5 @@
 
   <!-- Checkpoint handler node -->
   <node pkg="checkpoint_handler" type="checkpoint_handler_node.py" name="checkpoint_handler_node" output="screen"/>
-
-  <node pkg="tf2_ros" type="static_transform_publisher"
-      name="body_to_base_link" args="0 0 0 0 0 0 /body /base_link" />
 
 </launch>
