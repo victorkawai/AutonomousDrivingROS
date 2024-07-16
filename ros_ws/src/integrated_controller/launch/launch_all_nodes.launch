@@ -1,6 +1,0 @@
-<launch>
-  <node pkg="integrated_controller" type="integrated_controller_node" name="integrated_controller_node" output="screen"/>
-  <node pkg="lane_detection" type="lane_detection_node" name="lane_detection_node" output="screen"/>
-  <node pkg="obstacle_detection" type="obstacle_detection_node" name="obstacle_detection_node" output="screen"/>
-  <node pkg="semaphore_detection" type="semaphore_detection_node" name="semaphore_detection_node" output="screen"/>
-</launch>
