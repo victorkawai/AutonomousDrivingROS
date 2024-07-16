@@ -96,4 +96,7 @@
   <!-- Checkpoint handler node -->
   <node pkg="checkpoint_handler" type="checkpoint_handler_node.py" name="checkpoint_handler_node" output="screen"/>
 
+  <node pkg="tf2_ros" type="static_transform_publisher"
+      name="body_to_base_link" args="0 0 0 0 0 0 /body /base_link" />
+
 </launch>
