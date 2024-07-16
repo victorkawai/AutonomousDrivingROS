@@ -74,10 +74,9 @@
       <param name="max_range" value="30.0" />
   </node>
 
-  <!-- Perception Pipeline Nodes -->
-  <node pkg="perception_pipeline" type="fix_depth_frame.py" name="perception_node" output="screen"/>
-  <node pkg="perception_pipeline" type="point_cloud_frame_fix.py" name="point_cloud_frame_fix" output="screen"/>
-  <node pkg="perception_pipeline" type="traffic_light_detector.py" name="traffic_light_detector" output="screen"/>
+  <!-- Octomap Pipeline Nodes -->
+  <node pkg="octomap_pipeline" type="fix_depth_frame.py" name="perception_node" output="screen"/>
+  <node pkg="octomap_pipeline" type="traffic_light_detector.py" name="traffic_light_detector" output="screen"/>
 
   <!-- Transform point cloud node -->
   <node pkg="transform_pointcloud_node" type="transform_pointcloud_node" name="transform_pointcloud_node" output="screen"/>

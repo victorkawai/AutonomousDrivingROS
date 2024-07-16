@@ -1,5 +1,5 @@
 <package format="2">
-  <name>perception_pipeline</name>
+  <name>octomap_pipeline</name>
   <version>0.0.0</version>
   <description>The perception_pipeline package</description>
   <maintainer email="your_email@domain.com">Your Name</maintainer>

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(perception_pipeline)
+project(octomap_pipeline)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -21,6 +21,6 @@ include_directories(
 
 catkin_install_python(PROGRAMS
   src/fix_depth_frame.py
-  src/point_cloud_frame_fix.py
+  src/traffic_light_detector.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
