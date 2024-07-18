@@ -48,7 +48,7 @@ class RedLightDetectionNode:
         segmented_rgb_image = cv2.bitwise_and(self.rgb_image, self.rgb_image, mask=traffic_light_mask.astype(np.uint8))
         
         # Define range for red color and create a mask.
-        # NOTE: This is encoden bgr8, so red is the last value.
+        # NOTE: This is encoded bgr8, so red is the last value.
         lower_red1 = np.array([0, 0, 250])
         upper_red1 = np.array([100, 100, 255])
         red_mask = cv2.inRange(segmented_rgb_image, lower_red1, upper_red1)

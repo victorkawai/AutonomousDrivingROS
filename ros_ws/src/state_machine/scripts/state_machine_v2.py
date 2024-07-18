@@ -13,24 +13,24 @@ class StartAtFirstCheckpoint(smach.State):
     
     def execute(self, userdata):
         rospy.loginfo('Starting at first checkpoint')
-        time.sleep(2)  # Simulate initialization time
+        time.sleep(2)  # Simulate initialization time.
         return 'initialized'
 
 class FollowNextCheckpoint(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes=['checkpoint_reached', 'endpoint_reached', 'obstacle_detected', 'red_light_detected'])
-        self.checkpoints = 5  # Total number of checkpoints
+        self.checkpoints = 5  # Total number of checkpoints.
     
     def execute(self, userdata):
         rospy.loginfo(f'Following checkpoint. {self.checkpoints} checkpoints remaining.')
-        time.sleep(3)  # Simulate time to reach next checkpoint
+        time.sleep(3)  # Simulate time to reach next checkpoint.
         
         if self.checkpoints == 0:
             return 'endpoint_reached'
         
         self.checkpoints -= 1
         
-        # Simulate random events
+        # Simulate random events.
         event = random.choices(['checkpoint_reached', 'obstacle_detected', 'red_light_detected', 'green_light_detected'], 
                                weights=[70, 10, 10, 10])[0]
         return event
@@ -41,7 +41,7 @@ class AvoidObstacle(smach.State):
     
     def execute(self, userdata):
         rospy.loginfo('Avoiding obstacle')
-        time.sleep(2)  # Simulate time to avoid obstacle
+        time.sleep(2)  # Simulate time to avoid obstacle.
         return 'no_obstacle_detected'
 
 class Break(smach.State):
@@ -50,7 +50,7 @@ class Break(smach.State):
     
     def execute(self, userdata):
         rospy.loginfo('Breaking')
-        time.sleep(1)  # Simulate breaking time
+        time.sleep(1)  # Simulate breaking time.
         return random.choice(['alternate_trajectory_calculated', 'velocity_is_0'])
 
 class Wait(smach.State):
@@ -59,7 +59,7 @@ class Wait(smach.State):
     
     def execute(self, userdata):
         rospy.loginfo('Waiting for green light')
-        time.sleep(random.uniform(2, 5))  # Simulate random wait time for green light
+        time.sleep(random.uniform(2, 5))  # Simulate random wait time for green light.
         return 'green_light_detected'
 
 def main():

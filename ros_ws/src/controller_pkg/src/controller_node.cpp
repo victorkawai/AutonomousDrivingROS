@@ -26,7 +26,7 @@ class controllerNode{
 
 
   ros::Subscriber current_state_sub;
-  ros::Subscriber cmd_vel_sub;
+  ros::Subscriber cmd_vel_sub; // Published by move_base node.
   ros::Publisher car_commands_pub;
   ros::Timer timer;
 

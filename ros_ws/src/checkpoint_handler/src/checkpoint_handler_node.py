@@ -9,6 +9,8 @@ from time import sleep
 
 class CheckpointHandler:
     def __init__(self):
+
+        # NOTE: These are checkpoints used for testing purposes.
         self.checkpoints = [
             Point(-8.0, -62.0, 1.0),
             Point(-24.0, -62.0, 1.0),
@@ -34,8 +36,11 @@ class CheckpointHandler:
 
         rospy.init_node('checkpoint_handler', anonymous=True)
 
+        # Subscribers.
         self.pose_subscriber = rospy.Subscriber('/pose_est', PoseStamped, self.pose_callback)
         self.costmap_subscriber = rospy.Subscriber('/move_base/global_costmap/costmap', OccupancyGrid, self.costmap_callback)
+
+        # Publisher.
         self.goal_publisher = rospy.Publisher('/move_base/goal', MoveBaseActionGoal, queue_size=10)
     
     def costmap_callback(self, costmap_msg):
@@ -47,12 +52,15 @@ class CheckpointHandler:
 
     def pose_callback(self, pose_msg):
 
+        # Wait until costmap is published.
         if not self.costmap_received:
             rospy.loginfo("Waiting for costmap...")
             sleep(2)
             return
         
         if self.current_checkpoint_index >= len(self.checkpoints):
+            # NOTE: Spams terminal, implement flag such that it is only logged
+            #       once.
             # rospy.loginfo("All checkpoints reached!")
             return
         
@@ -62,6 +70,7 @@ class CheckpointHandler:
         distance = self.calculate_distance(current_position, checkpoint_position)
         # rospy.loginfo(f"Distance to checkpoint: {distance}")
 
+        # Update if car is close enough to checkpoint.
         if distance < self.threshold_radius:
             self.current_checkpoint_index += 1
             self.publish_goal(self.checkpoints[self.current_checkpoint_index])
