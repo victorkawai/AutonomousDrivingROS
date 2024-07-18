@@ -6,6 +6,8 @@ import numpy as np
 from sensor_msgs.msg import Image
 from std_msgs.msg import Bool
 from cv_bridge import CvBridge, CvBridgeError
+from perception_pipeline.msg import RedLightDetection
+
 
 class RedLightDetectionNode:
     def __init__(self):
@@ -14,7 +16,8 @@ class RedLightDetectionNode:
         self.bridge = CvBridge()
 
         # Publishers.
-        self.red_light_pub = rospy.Publisher('/red_light', Bool, queue_size=10)
+        self.red_light_pub = rospy.Publisher('/red_light', RedLightDetection, queue_size=10)
+
         self.segmented_image_pub = rospy.Publisher('/segmented_image', Image, queue_size=10)
         
         # Subscriber.
@@ -56,8 +59,11 @@ class RedLightDetectionNode:
         # Check if there are any red pixels in the segmented image.
         red_detected = np.any(red_mask > 0)
 
-        # Publish the result.
-        self.red_light_pub.publish(Bool(red_detected))
+        # Publish the result using own ROS message type.
+        red_light_msg = RedLightDetection()
+        red_light_msg.red_detected = red_detected
+        self.red_light_pub.publish(red_light_msg)
+
 
         # Publish the segmented RGB image.
         try:

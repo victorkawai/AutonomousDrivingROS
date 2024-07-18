@@ -1,5 +1,5 @@
 <package format="2">
-  <name>octomap_pipeline</name>
+  <name>perception_pipeline</name>
   <version>0.0.0</version>
   <description>The perception_pipeline package</description>
   <maintainer email="your_email@domain.com">Your Name</maintainer>
@@ -13,6 +13,9 @@
   <depend>sensor_msgs</depend>
   <depend>pcl_ros</depend>
   <depend>depth_image_proc</depend>
+
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
 
   <exec_depend>python3</exec_depend>
   <exec_depend>python3-pip</exec_depend>

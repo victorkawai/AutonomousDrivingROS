@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(octomap_pipeline)
+project(perception_pipeline)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -8,10 +8,21 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   pcl_ros
   depth_image_proc
+  message_generation
+)
+
+add_message_files(
+  FILES
+  RedLightDetection.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
 )
 
 catkin_package(
-  CATKIN_DEPENDS roscpp rospy std_msgs sensor_msgs pcl_ros depth_image_proc
+  CATKIN_DEPENDS roscpp rospy std_msgs sensor_msgs pcl_ros depth_image_proc message_runtime
 )
 
 include_directories(

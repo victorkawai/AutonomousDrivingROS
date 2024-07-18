@@ -1,0 +1,1 @@
+bool red_detected
